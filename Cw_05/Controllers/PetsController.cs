@@ -56,5 +56,19 @@ public class PetsController : ControllerBase
         return NoContent();
 
     }
+
+    [HttpDelete("{id:int}")]
+    public IActionResult DeletePet(int id)
+    {
+        var petToDelete = _pets.FirstOrDefault(p => p.Id == id);
+        if (petToDelete == null)
+        {
+            return NoContent();
+        }
+
+        _pets.Remove(petToDelete);
+        return NoContent();
+    }
+    
     
 }

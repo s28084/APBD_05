@@ -34,7 +34,11 @@ public class PetsController : ControllerBase
 
         return Ok(pet);
     }
-    
+
     [HttpPost]
-    
+    public IActionResult CreatePet(Pet pet)
+    {
+        _pets.Add(pet);
+        return StatusCode(StatusCodes.Status201Created);
+    }
 }

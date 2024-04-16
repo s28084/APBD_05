@@ -41,4 +41,20 @@ public class PetsController : ControllerBase
         _pets.Add(pet);
         return StatusCode(StatusCodes.Status201Created);
     }
+
+    [HttpPut("{id:int}")]
+    public IActionResult UpdatePet(int id, Pet pet)
+    {
+        var petToEdit = _pets.FirstOrDefault(p => p.Id == id);
+        if (petToEdit == null)
+        {
+            return NotFound($"Pet with id {id} was not found");
+        }
+
+        _pets.Remove(petToEdit);
+        _pets.Add(pet);
+        return NoContent();
+
+    }
+    
 }

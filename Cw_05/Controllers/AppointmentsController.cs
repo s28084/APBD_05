@@ -45,7 +45,7 @@ public class AppointmentsController : ControllerBase
         return StatusCode(StatusCodes.Status201Created);
     }
 
-    [HttpPut]
+    [HttpPut("{date:string}/{petId:int}")]
     public IActionResult UpdateAppointment(string date, int petId, Appointment appointment)
     {
         var appointmentToEdit = _appointments.FirstOrDefault(a => ((a.PetId == petId) && (a.Date == date)));
@@ -59,6 +59,21 @@ public class AppointmentsController : ControllerBase
         return NoContent();
 
     }
+
+    [HttpDelete("{date:string}/{petId:int}")]
+    public IActionResult DeleteAppointment(string date, int petId)
+    {
+        var appointmentToDelete = _appointments.FirstOrDefault(a => ((a.PetId == petId) && (a.Date == date)));
+        if (appointmentToDelete == null)
+        {
+            return NotFound($"No Appointment found on {date} for pet with id {petId}");
+        }
+
+        _appointments.Remove(appointmentToDelete);
+        return NoContent();
+    }
+    
+    
     
     
 }

@@ -1,4 +1,5 @@
 using Cw_05.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cw_05.Controllers;
@@ -6,7 +7,7 @@ namespace Cw_05.Controllers;
 [Route("api/appointments")]
 [ApiController]
 
-public class AppointmentsController
+public class AppointmentsController : ControllerBase
 {
     private static readonly List<Appointment> _appointments = new()
     {
@@ -16,8 +17,26 @@ public class AppointmentsController
         new Appointment { Date = "19-04-2024 08:00", PetId = 1, Description = "vaccination", Price = 90.75 },
         new Appointment { Date = "20-04-2024 11:00", PetId = 4, Description = "health screening", Price = 210.00 }
     };
-    
-    
+
+    [HttpGet]
+    public IActionResult GetAppointment()
+    {
+        return Ok(_appointments);
+    }
+
+    [HttpGet("{petId:int}")]
+    public IActionResult GetAppointment(int petId)
+    {
+        
+        var appointment = _appointments.Where(a => a.PetId == petId).ToList();
+        var pet = _appointments.FirstOrDefault(p => p.PetId == petId);
+        if ((appointment.Any() == false) || (pet == null))
+        {
+            return NotFound($"Pet with id {petId} has no appointments");
+        }
+
+        return Ok(appointment);
+    }
     
     
 }

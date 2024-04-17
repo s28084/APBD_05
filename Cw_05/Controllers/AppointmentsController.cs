@@ -37,6 +37,28 @@ public class AppointmentsController : ControllerBase
 
         return Ok(appointment);
     }
+
+    [HttpPost]
+    public IActionResult CreateAppointment(Appointment appointment)
+    {
+        _appointments.Add(appointment);
+        return StatusCode(StatusCodes.Status201Created);
+    }
+
+    [HttpPut]
+    public IActionResult UpdateAppointment(string date, int petId, Appointment appointment)
+    {
+        var appointmentToEdit = _appointments.FirstOrDefault(a => ((a.PetId == petId) && (a.Date == date)));
+        if (appointmentToEdit == null)
+        {
+            return NotFound($"No Appointment found on {date} for pet with id {petId}");
+        }
+
+        _appointments.Remove(appointmentToEdit);
+        _appointments.Add(appointment);
+        return NoContent();
+
+    }
     
     
 }
